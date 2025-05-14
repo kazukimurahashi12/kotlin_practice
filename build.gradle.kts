@@ -1,21 +1,60 @@
 plugins {
-    kotlin("jvm") version "2.1.20"
+    id("org.springframework.boot") version "3.2.5"
+    id("io.spring.dependency-management") version "1.1.4"
+    kotlin("jvm") version "1.9.23"
+    kotlin("plugin.spring") version "1.9.23"
+    id("nu.studer.jooq") version "8.2" // JOOQ用
+    id("application")
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+application {
+    mainClass.set("org.example.MainKt")
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-jooq")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    runtimeOnly("com.mysql:mysql-connector-j")
+
+    // JOOQ DSL
+    jooqGenerator("com.mysql:mysql-connector-j")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(17)
+jooq {
+    version.set("3.18.6")
+    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
+
+    configurations {
+        create("main") {
+            jooqConfiguration.apply {
+                jdbc.apply {
+                    driver = "com.mysql.cj.jdbc.Driver"
+                    url = "jdbc:mysql://localhost:3306/local?serverTimezone=Asia/Tokyo"
+                    user = "testuser"
+                    password = "testpw"
+                }
+                generator.apply {
+                    name = "org.jooq.codegen.DefaultGenerator"
+                    database.apply {
+                        name = "org.jooq.meta.mysql.MySQLDatabase"
+                        inputSchema = "local"
+                    }
+                    generate.apply {
+                        isDeprecated = false
+                        isRecords = true
+                    }
+                    target.apply {
+                        packageName = "com.example.jooq.generated"
+                        directory = "src/main/kotlin"
+                    }
+                }
+            }
+        }
+    }
 }
