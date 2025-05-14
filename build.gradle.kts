@@ -51,7 +51,7 @@ jooq {
                     }
                     target.apply {
                         packageName = "com.example.jooq.generated"
-                        directory = "src/main/kotlin"
+                        directory = "build/generated-sources/jooq"
                     }
                 }
             }
