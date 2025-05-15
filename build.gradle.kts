@@ -3,7 +3,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
-    id("nu.studer.jooq") version "8.2" // JOOQ用
+    id("nu.studer.jooq") version "8.2"
     id("application")
 }
 
@@ -27,7 +27,7 @@ dependencies {
 }
 
 jooq {
-    version.set("3.18.6")
+    version.set("3.18.2")
     edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
 
     configurations {
@@ -44,6 +44,15 @@ jooq {
                     database.apply {
                         name = "org.jooq.meta.mysql.MySQLDatabase"
                         inputSchema = "local"
+
+                        // 小文字でマッチするように修正
+                        forcedTypes.add(
+                            org.jooq.meta.jaxb.ForcedType().apply {
+                                name = "BOOLEAN"
+                                includeExpression = ".*\\.is_active"  // 小文字に修正
+                                includeTypes = "TINYINT\\(1\\)"  // TINYINT(1)に完全一致
+                            }
+                        )
                     }
                     generate.apply {
                         isDeprecated = false
