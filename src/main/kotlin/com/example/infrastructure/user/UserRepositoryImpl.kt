@@ -6,9 +6,7 @@ import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 
 @Repository
-class UserRepositoryImpl(
-    private val dsl: DSLContext
-) {
+class UserRepositoryImpl(private val dsl: DSLContext) {
     fun findAll(): List<User> {
         return dsl.selectFrom(USERS)
             .fetch()
