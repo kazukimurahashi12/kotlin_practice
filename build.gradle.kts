@@ -8,7 +8,7 @@ plugins {
 }
 
 application {
-    mainClass.set("org.example.MainKt")
+    mainClass.set("com.example.ApplicationKt")
 }
 
 repositories {
