@@ -16,4 +16,12 @@ class UserService(private val userRepository: UserRepository) {
         val updated = user.copy(isActive = !user.isActive)
         userRepository.update(updated)
     }
+
+    @Transactional
+    fun updateName(userID: Int, newName: String) {
+        val user = userRepository.findByID(userID)
+            ?: throw IllegalArgumentException("User not found: $userID")
+        val updated = user.updateNameIfActive(newName)
+        userRepository.update(updated)
+    }
 }
