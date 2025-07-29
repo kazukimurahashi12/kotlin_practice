@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(private val userRepository: UserRepository) {
     fun getAllUsers(): List<User> = userRepository.findAll()
 
-    // TODO
+    // TODO 1
     @Transactional
     fun toggleActive(userID: Int) {
         val user =
