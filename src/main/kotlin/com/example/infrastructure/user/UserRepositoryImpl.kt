@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class UserRepositoryImpl(private val dsl: DSLContext): UserRepository {
-    // 全件検索 2
+    // 全件検索
      override fun findAll(): List<User> {
         return dsl.selectFrom(USERS)
             .fetch()
