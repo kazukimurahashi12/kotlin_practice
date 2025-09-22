@@ -21,7 +21,7 @@ class UserRepositoryImpl(private val dsl: DSLContext): UserRepository {
             }
     }
 
-    // ID検索 1
+    // ID検索
     override fun findByID(id: Int):User? {
         return dsl.selectFrom(USERS)
             .where(USERS.ID.eq(id))
